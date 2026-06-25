@@ -1,23 +1,55 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('Clone repo'){
-            steps{
-                git branch: 'main', url: 'https://github.com/prashantgohel321/DevOps-Project-Two-Tier-Flask-App.git'
+
+    environment {
+        IMAGE_NAME = "two-tier-flask-app"
+        CONTAINER_NAME = "flask-app"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/mehullohiya/two-tire-project.git'
             }
         }
-        stage('Build image'){
-            steps{
-                sh 'docker build -t flask-app .'
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
-        stage('Deploy with docker compose'){
-            steps{
-                // existing container if they are running
-                sh 'docker compose down || true'
-                // start app, rebuilding flask image
-                sh 'docker compose up -d --build'
+
+        stage('Stop Existing Container') {
+            steps {
+                sh '''
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
+                '''
             }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                docker run -d \
+                --name $CONTAINER_NAME \
+                -p 5000:5000 \
+                $IMAGE_NAME
+                '''
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful!'
+        }
+
+        failure {
+            echo 'Deployment Failed!'
         }
     }
 }
