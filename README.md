@@ -66,7 +66,7 @@ This document outlines the step-by-step process for deploying a 2-tier web appli
     * Select the **t2.micro** instance type for free-tier eligibility.
     * Create and assign a new key pair for SSH access.
 
-<img src="diagrams/1.png">
+<img src="diagrams/01.lpeg">
 
 2.  **Configure Security Group:**
     * Create a security group with the following inbound rules:
@@ -75,7 +75,7 @@ This document outlines the step-by-step process for deploying a 2-tier web appli
         * **Type:** Custom TCP, **Protocol:** TCP, **Port:** 5000 (for Flask), **Source:** Anywhere (0.0.0.0/0)
         * **Type:** Custom TCP, **Protocol:** TCP, **Port:** 8080 (for Jenkins), **Source:** Anywhere (0.0.0.0/0)
 
-<img src="diagrams/2.png">
+<img src="diagrams/02.jpeg">
 
 3.  **Connect to EC2 Instance:**
     * Use SSH to connect to the instance's public IP address.
